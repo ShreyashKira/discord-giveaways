@@ -124,6 +124,33 @@ class GiveawaysManager extends EventEmitter {
      *      exemptMembers: (member) => !member.roles.some((r) => r.name === "Nitro Boost")
      * });
      */
+    createEndEmbed(giveaway, winners) {
+        if(winners) {
+            let formattedWinners = winners.map(w => `<@${w.id}>`).join(', ');
+                let str =
+                    giveaway.messages.winners.substr(0, 1).toUpperCase() +
+                    giveaway.messages.winners.substr(1, giveaway.messages.winners.length) +
+                    ': ' +
+                    formattedWinners;
+            let embed = this.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
+                embed
+                    .setAuthor(giveaway.prize)
+                    .setColor(giveaway.embedColorEnd)
+                    .setFooter(giveaway.messages.endedAt)
+                    .setDescription(`${str}\n${giveaway.hostedBy ? giveaway.messages.hostedBy.replace('{user}', giveaway.hostedBy) : ''}`)
+                    .setTimestamp(new Date(giveaway.endAt).toISOString());
+            return embed;
+        } else {
+            let embed = this.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
+                embed
+                    .setAuthor(giveaway.prize)
+                    .setColor(giveaway.embedColorEnd)
+                    .setFooter(giveaway.messages.endedAt)
+                    .setDescription(`${giveaway.messages.noWinner}\n${giveaway.hostedBy ? giveaway.messages.hostedBy.replace('{user}', giveaway.hostedBy) : ''}`)
+                    .setTimestamp(new Date(giveaway.endAt).toISOString());
+            return embed;
+        }
+    }
     start(channel, options) {
         return new Promise(async (resolve, reject) => {
             if (!this.ready) {

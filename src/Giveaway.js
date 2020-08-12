@@ -362,19 +362,7 @@ class Giveaway extends EventEmitter {
             this.manager.emit('giveawayEnded', this, winners);
             this.manager.editGiveaway(this.messageID, this.data);
             if (winners.length > 0) {
-                let formattedWinners = winners.map(w => `<@${w.id}>`).join(', ');
-                let str =
-                    this.messages.winners.substr(0, 1).toUpperCase() +
-                    this.messages.winners.substr(1, this.messages.winners.length) +
-                    ': ' +
-                    formattedWinners;
-                let embed = this.manager.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
-                embed
-                    .setAuthor(this.prize)
-                    .setColor(this.embedColorEnd)
-                    .setFooter(this.messages.endedAt)
-                    .setDescription(`${str}\n${this.hostedBy ? this.messages.hostedBy.replace('{user}', this.hostedBy) : ''}`)
-                    .setTimestamp(new Date(this.endAt).toISOString());
+                let embed = await this.manager.createEndEmbed(this, winners);
                 this.message.edit(this.messages.giveawayEnded, { embed });
                 this.message.channel.send(
                     this.messages.winMessage
@@ -383,13 +371,7 @@ class Giveaway extends EventEmitter {
                 );
                 resolve(winners);
             } else {
-                let embed = this.manager.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
-                embed
-                    .setAuthor(this.prize)
-                    .setColor(this.embedColorEnd)
-                    .setFooter(this.messages.endedAt)
-                    .setDescription(`${this.messages.noWinner}\n${this.hostedBy ? this.messages.hostedBy.replace('{user}', this.hostedBy) : ''}`)
-                    .setTimestamp(new Date(this.endAt).toISOString());
+                let embed = await this.manager.createEndEmbed(this, false)
                 this.message.edit(this.messages.giveawayEnded, { embed });
                 resolve();
             }
@@ -415,14 +397,7 @@ class Giveaway extends EventEmitter {
             }
             let winners = await this.roll();
             if (winners.length > 0) {
-                let formattedWinners = winners.map(w => '<@' + w.id + '>').join(', ');
-                let embed = this.manager.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
-                embed
-                    .setAuthor(this.prize)
-                    .setColor(this.embedColorEnd)
-                    .setFooter(this.messages.endedAt)
-                    .setDescription(`${str}\n${this.hostedBy ? this.messages.hostedBy.replace("{user}", this.hostedBy) : ""}`)
-                    .setTimestamp(new Date(this.endAt).toISOString());
+                let embed = await this.manager.createEndEmbed(this, winners)
                 this.message.edit(this.messages.giveawayEnded, { embed });
                 this.channel.send(options.messages.congrat.replace('{winners}', formattedWinners));
                 resolve(winners);
