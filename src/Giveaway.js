@@ -79,10 +79,10 @@ class Giveaway extends EventEmitter {
          */
         this.messages = options.messages;
         /**
-         * Requirements section for extra data
-         * @type {Requirements}
+         * Extra data concerning this giveaway
+         * @type {any}
          */
-        this.requirements = options.requirements;
+        this.extraData = options.extraData;
         /**
          * The giveaway data
          * @type {GiveawayData}

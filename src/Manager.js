@@ -187,7 +187,7 @@ class GiveawaysManager extends EventEmitter {
                 exemptMembers: options.exemptMembers,
                 embedColor: options.embedColor,
                 embedColorEnd: options.embedColorEnd,
-                requirements: options.requirements
+                extraData: options.extraData
             });
             let embed = this.v12 ? new Discord.MessageEmbed() : new Discord.RichEmbed();
             embed
@@ -280,7 +280,7 @@ class GiveawaysManager extends EventEmitter {
             }
             this.giveaways = this.giveaways.filter((g) => g.messageID !== messageID);
             await this.deleteGiveaway(messageID);
-            this.emit('giveawayDeleted', giveaway)
+            this.emit('giveawayDeleted', giveaway);
             resolve();
         });
     }
