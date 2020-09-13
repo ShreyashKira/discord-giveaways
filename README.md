@@ -38,7 +38,7 @@ settings = {
     token: "Your Discord Token"
 };
 
-// Requires Manager from discord-giveaways
+// Requires Manager from discord-giveaways.
 const { GiveawaysManager } = require("discord-giveaways");
 // Starts updating currents giveaways
 const manager = new GiveawaysManager(client, {
